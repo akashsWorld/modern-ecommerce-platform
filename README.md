@@ -1,2 +1,2 @@
 # online-food-delivery-platform
-A online food Delivery system like Zomato, Swiggy.
+A modern responsive e-commerce platform, which is built on microservice architecture.
