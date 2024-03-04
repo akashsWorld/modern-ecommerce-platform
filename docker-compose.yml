@@ -29,8 +29,33 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: synoms
+      MONGO_INITDB_ROOT_PASSWORD: synoms
+    ports:
+      - "27017:27017"
+    networks:
+      - mongo
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8521:8081"
+    networks:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: synoms
+      ME_CONFIG_MONGODB_ADMINPASSWORD: synoms
+      ME_CONFIG_MONGODB_URL: mongodb://synoms:synoms@mongo:27017/
 networks:
   postgres:
+    driver: bridge
+  mongo:
     driver: bridge
 volumes:
   postgres:
