@@ -3,3 +3,16 @@ server:
 spring:
   application:
     name: user
+
+  datasource:
+    url:
+    password:
+    username:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: 
+        format_sql: true
+    show-sql: true
