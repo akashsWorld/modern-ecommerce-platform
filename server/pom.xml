@@ -12,6 +12,7 @@
   <name>server</name>
   <modules>
     <module>products</module>
+    <module>app-client</module>
   </modules>
 
 
@@ -52,6 +53,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+
   </dependencies>
 <build>
   <pluginManagement>

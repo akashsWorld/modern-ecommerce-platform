@@ -21,7 +21,7 @@
 - [ ] Search with filters.
 - [ ] Register new product.
 - [ ] Delete product.
-- [ ] Update product price.
+- [ ] Update product priceFilter.
 - [ ] Update product offers.
 - [ ] Update offer catalogue on products.
 - [ ] Update product quantity.

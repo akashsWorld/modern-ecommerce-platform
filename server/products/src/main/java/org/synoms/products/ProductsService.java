@@ -1,4 +1,7 @@
 package org.synoms.products;
 
-public class ProductsService {
+import org.synoms.client.products.CategoryResponse;
+
+public interface ProductsService {
+    CategoryResponse getAllCategories();
 }
