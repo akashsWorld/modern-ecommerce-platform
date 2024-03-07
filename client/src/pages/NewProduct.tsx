@@ -3,7 +3,7 @@ import ProductsFrom, {
   NewProductObject,
 } from "../components/ProdcutsFrom/ProductsFrom";
 import axios from "axios";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { json, useLoaderData, useNavigate } from "react-router-dom";
 
 export interface newProductResponse {
   result: number;
@@ -12,7 +12,6 @@ export interface newProductResponse {
 
 const NewProduct = () => {
   const categories = useLoaderData() as newProductResponse;
-  
 
   const navigate = useNavigate();
 
@@ -21,36 +20,62 @@ const NewProduct = () => {
 
     const formData = new FormData();
 
-
-    product.images.map((curr,index)=>{
-      formData.append("productImages", curr.data,`image-${index}`);
+    product.images.map((curr, index) => {
+      formData.append("productImages", curr.data, `image-${index}`);
       return curr;
-    })
+    });
 
     const data = {
       productName: product.productName,
       description: product.description,
-      productPrice:product.productPrice,
-      discount:product.discount,
-      categories:product.categories,
-      specification:null
-    }
+      productPrice: product.productPrice,
+      discount: product.discount,
+      categories: product.categories,
+      specification: null,
+    };
 
-    // TODO: Have to send the request and also create another api to only store the product related data.
-    const respose = await axios.post('http://localhost:8081/products',formData,{
-      headers:{
-        'Content-Type':'multipart/form-data'
+    const savProductResponse = await axios.post(
+      "http://localhost:8081/products",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
-    console.log(respose.status);
+    if (savProductResponse.status === 204) {
+      // const id = savProductResponse.data;
+      const id = 1;
 
-    const response = await fetch('http://localhost:8081/products',{
-      method:'POST',
-      body:formData
-    })
 
-    console.log(response.status);
+      // const saveImageResponse = await fetch(
+      //   `http://localhost:8081/images/${id}`,{
+      //     mode:'no-cors',
+      //     body:formData,
+      //     method:'POST'
+      //   }
+      // );
+
+      const saveImageResponse = await axios.post(`http://localhost:8081/images/${id}`,formData);
+
+      if (saveImageResponse.status===204) {
+        
+        navigate("/admin");
+        return;
+      } else {
+        const data = await saveImageResponse.data;
+        throw json({
+          status: saveImageResponse.status,
+          message: data.message,
+        });
+      }
+    } else {
+      throw json({
+        status: savProductResponse.status,
+        message: savProductResponse.data.message,
+      });
+    }
   };
 
   const [product, setProduct] = useState<NewProductObject>({

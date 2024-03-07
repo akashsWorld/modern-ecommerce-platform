@@ -35,20 +35,11 @@ public class ProductsController {
         return null;
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = {"application/json"})
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void saveProduct(
-            @RequestPart(name = "data") ProductDTO productDTO,
-            @RequestPart(name = "productImages") List<MultipartFile> images
-            ){
+    public void saveProduct(@RequestBody ProductDTO product){
 
-//        TODO: have to handle request.
-        System.out.println(productDTO.toString());
-
-        for(MultipartFile multipartFile: images){
-            System.out.println(multipartFile.getContentType());
-        }
-
+        System.out.println(product);
 
     }
     @PostMapping(value = "/saveMultiple")
