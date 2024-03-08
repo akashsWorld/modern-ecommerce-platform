@@ -1,11 +1,9 @@
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import {Admin, Home,NewProduct,ErrorMain,Root} from './pages'
-import AdminDashBoard from './components/AdminDashBoard/AdminDashBoard'
-import rootLayout from './router-config/root-layout'
+import {routerConfig} from './router-config'
 
 const router = createBrowserRouter([
-  rootLayout
+  routerConfig
 ])
 
 const App = () => {

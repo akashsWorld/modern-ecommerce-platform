@@ -22,7 +22,8 @@ public class ImageController {
     @PostMapping(value = "/{id}",consumes = {"multipart/form-data"})
     @ResponseStatus( code = HttpStatus.NO_CONTENT)
     public void saveProductImages(@PathVariable(value = "id") String id ,
-                                  @RequestParam(name = "productImages") List<MultipartFile> images) throws IOException {
+                                  @RequestParam(name = "productImages") List<MultipartFile> images) throws IOException, InterruptedException {
+
 
         imageService.saveImages(id,images);
     }

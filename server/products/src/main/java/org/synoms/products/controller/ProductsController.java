@@ -11,6 +11,7 @@ import org.synoms.client.products.ProductListDTO;
 import org.synoms.products.service.ProductsService;
 import org.synoms.products.util.PriceFilter;
 
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -48,7 +49,8 @@ public class ProductsController {
     }
 
     @GetMapping(value = "/categories")
-    public ResponseEntity<CategoryResponse> getAllProductCategories(){
+    public ResponseEntity<CategoryResponse> getAllProductCategories() throws InterruptedException {
+        
         return ResponseEntity.ok().body(productsService.getAllCategories());
     }
 

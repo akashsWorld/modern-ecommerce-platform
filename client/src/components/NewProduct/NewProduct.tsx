@@ -1,7 +1,8 @@
 import React, { FormEvent, useState } from "react";
+import './new-product.scss';
 import ProductsFrom, {
   NewProductObject,
-} from "../components/ProdcutsFrom/ProductsFrom";
+} from "../ProdcutsFrom/ProductsFrom";
 import axios from "axios";
 import { json, useLoaderData, useNavigate } from "react-router-dom";
 

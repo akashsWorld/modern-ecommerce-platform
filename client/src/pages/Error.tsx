@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ErrorMain = () => {
+const Error = () => {
   return (
     <div>
       <h1>Some Error Occured</h1>
@@ -9,4 +9,4 @@ const ErrorMain = () => {
   )
 }
 
-export default ErrorMain
+export default Error

@@ -1,7 +1,6 @@
 import Home from "./Home";
-import NewProduct from "./NewProduct";
 import Admin from "./Admin";
 import Root from "./Root";
-import ErrorMain from "./Error";
-
-export {Home, NewProduct ,Admin,ErrorMain,Root};
+import Error from "./Error";
+import ProductsPage from "./ProductsPage";
+export {Home ,Admin,Error,Root,ProductsPage};
