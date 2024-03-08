@@ -1,10 +1,7 @@
 package org.synoms.products.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ProductImages {
 
     @Id
@@ -22,6 +20,9 @@ public class ProductImages {
 
     @Indexed(name = "_sequence")
     private Integer sequence;
+
+    @Indexed(name = "_image_name")
+    private String imageName;
 
     @Indexed(name = "_image")
     private Binary image;

@@ -44,18 +44,9 @@ const NewProduct = () => {
       }
     );
 
-    if (savProductResponse.status === 204) {
+    if (savProductResponse.status === 201) {
       // const id = savProductResponse.data;
-      const id = 1;
-
-
-      // const saveImageResponse = await fetch(
-      //   `http://localhost:8081/images/${id}`,{
-      //     mode:'no-cors',
-      //     body:formData,
-      //     method:'POST'
-      //   }
-      // );
+      const id = savProductResponse.data;
 
       const saveImageResponse = await axios.post(`http://localhost:8081/images/${id}`,formData);
 

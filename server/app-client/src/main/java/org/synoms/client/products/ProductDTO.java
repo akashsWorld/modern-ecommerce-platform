@@ -1,8 +1,6 @@
 package org.synoms.client.products;
 
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.multipart.MultipartFile;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ProductDTO(
@@ -12,7 +10,8 @@ public record ProductDTO(
     Double productPrice,
     Integer discount,
     List<Category> categories,
-    SpecificationDTO specification
+    SpecificationDTO specification,
+    LocalDateTime launchDate
 
 ) {
 }

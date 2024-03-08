@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.synoms.client.products.Category;
 import org.synoms.client.products.CategoryResponse;
 import org.synoms.client.products.ProductDTO;
 import org.synoms.client.products.ProductListDTO;
-import org.synoms.products.ProductsService;
+import org.synoms.products.service.ProductsService;
 import org.synoms.products.util.PriceFilter;
 
 import java.util.List;
@@ -36,11 +35,8 @@ public class ProductsController {
     }
 
     @PostMapping(consumes = {"application/json"})
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void saveProduct(@RequestBody ProductDTO product){
-
-        System.out.println(product);
-
+    public ResponseEntity<String> saveProduct(@RequestBody ProductDTO productDTO){
+       return ResponseEntity.status(HttpStatus.CREATED).body(productsService.saveProduct(productDTO));
     }
     @PostMapping(value = "/saveMultiple")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
