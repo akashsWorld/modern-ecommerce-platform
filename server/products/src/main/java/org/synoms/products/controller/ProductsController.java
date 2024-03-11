@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.synoms.client.products.Category;
+import org.synoms.products.entity.Category;
 import org.synoms.client.products.CategoryResponse;
 import org.synoms.client.products.ProductDTO;
 import org.synoms.client.products.ProductListDTO;
@@ -50,7 +50,7 @@ public class ProductsController {
 
     @GetMapping(value = "/categories")
     public ResponseEntity<CategoryResponse> getAllProductCategories() throws InterruptedException {
-        
+        Thread.sleep(Duration.ofMinutes(1));
         return ResponseEntity.ok().body(productsService.getAllCategories());
     }
 

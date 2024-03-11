@@ -7,4 +7,5 @@ public interface ProductsService {
     CategoryResponse getAllCategories();
 
     String saveProduct(ProductDTO productDTO);
+
 }

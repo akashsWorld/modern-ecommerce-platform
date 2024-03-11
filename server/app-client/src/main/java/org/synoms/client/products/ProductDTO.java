@@ -9,7 +9,7 @@ public record ProductDTO(
     String description,
     Double productPrice,
     Integer discount,
-    List<Category> categories,
+    List<CategoryDTO> categories,
     SpecificationDTO specification,
     LocalDateTime launchDate
 
