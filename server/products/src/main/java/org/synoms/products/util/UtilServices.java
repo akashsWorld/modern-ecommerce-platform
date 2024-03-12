@@ -53,11 +53,24 @@ public class UtilServices {
     }
 
     public List<CategoryDTO> convertToCategoryDTO(List<Category> categories){
+
+
         return categories.stream().map(cat-> new CategoryDTO(cat.getName())).toList();
     }
 
     public List<Category> convertToCategoryList(List<CategoryDTO> categoryDTOS){
-        return categoryDTOS.stream().map(categoryDTO -> Category.builder().name(categoryDTO.category()).build()).toList();
+        return categoryDTOS.stream().map(categoryDTO -> Category.builder()
+                .name(toCapitalize(categoryDTO.category()))
+                .categorySearchName(categoryDTO.category().toLowerCase())
+                .build()).toList();
+    }
+
+    public String toCapitalize(String str){
+        if(str == null || str.isEmpty()){
+            return str;
+        }
+        char ch = Character.toUpperCase(str.charAt(0));
+        return ch + str.substring(1);
     }
 
 

@@ -50,7 +50,6 @@ public class ProductsController {
 
     @GetMapping(value = "/categories")
     public ResponseEntity<CategoryResponse> getAllProductCategories() throws InterruptedException {
-        Thread.sleep(Duration.ofMinutes(1));
         return ResponseEntity.ok().body(productsService.getAllCategories());
     }
 

@@ -1,23 +1,5 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
-
-export interface ProductFormProps {
-  categorieList: string[];
-  formSubmitHandler: (eve: FormEvent<HTMLFormElement>) => void;
-  product: NewProductObject;
-  setProduct: React.Dispatch<React.SetStateAction<NewProductObject>>;
-}
-export interface NewProductObject {
-  productName: string;
-  description: string;
-  images: FileObject[];
-  productPrice: number;
-  discount: number;
-  categories: string[];
-}
-export interface FileObject {
-  data: File;
-  name: string;
-}
+import React, { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
+import { CategoryResponse, NewProductObject } from "../NewProduct/NewProduct";
 const ProductsFrom = ({
   categorieList,
   formSubmitHandler,
@@ -26,6 +8,50 @@ const ProductsFrom = ({
 }: ProductFormProps) => {
   // Data hooks
   const [imageNumber, setImageNumber] = useState(1);
+  const [newCategory, setNewCategory] = useState("");
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
+
+  const newCategoryChangeHandler = (eve: ChangeEvent<HTMLInputElement>) => {
+    const value = eve.target.value;
+    setNewCategory(value);
+
+    console.log(categorieList);
+    const categories = categorieList.filter((cc) =>
+      cc.category.toLowerCase().includes(value.toLowerCase())
+    );
+    setCategories(categories);
+  };
+
+  const categoryOnDelete = (value: string) => {
+    const category = product.categories.filter((cat) => {
+      cat.category !== value;
+    });
+    setProduct((pre) => {
+      return {
+        ...pre,
+        categories: category,
+      };
+    });
+  };
+
+  const addCategoryHandler = () => {
+    const isPresent = product.categories.includes({ category: newCategory });
+
+    if (!isPresent) {
+      setProduct((pre) => {
+        return {
+          ...pre,
+          categories: [
+            ...pre.categories,
+            {
+              category: newCategory,
+            },
+          ],
+        };
+      });
+      setNewCategory("");
+    }
+  };
 
   // Handler functions
 
@@ -56,23 +82,6 @@ const ProductsFrom = ({
     }
   };
 
-  const categoriesOnChangehadle = (eve: ChangeEvent<HTMLInputElement>) => {
-    const value = eve.target.value;
-    if (eve.target.checked) {
-      setProduct((pre) => {
-        return { ...pre, categories: [...pre.categories, value] };
-      });
-    } else {
-      setProduct((pre) => {
-        const cat = pre.categories;
-
-        const newCat = cat.filter((ca) => {
-          return ca !== value;
-        });
-        return { ...pre, categories: newCat };
-      });
-    }
-  };
   const productPriceChangeHandle = (eve: ChangeEvent<HTMLInputElement>) => {
     const val = eve.target.value;
     if (val.length > 0 && isParseAble(val) === true) {
@@ -154,23 +163,49 @@ const ProductsFrom = ({
         />
       </div>
 
-      {/* Map all categories */}
-      {categorieList.map((category, index) => {
-        return (
-          <div key={index}>
-            <label htmlFor={category}>
-              <input
-                type="checkbox"
-                name={category}
-                checked={product.categories.includes(category)}
-                onChange={categoriesOnChangehadle}
-                value={category}
-              />
-              {category}
-            </label>
-          </div>
-        );
-      })}
+      <div>
+        {product.categories.map((cat, index) => {
+          return (
+            <div key={index}>
+              <p>{cat.category}</p>
+              <button onClick={() => categoryOnDelete(cat.category)}>
+                Remove
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      <label htmlFor="newCategory">
+        Category
+        <input
+          type="text"
+          name="newCategory"
+          value={newCategory}
+          onChange={newCategoryChangeHandler}
+        />
+      </label>
+      <button
+        disabled={newCategory.length > 0 ? false : true}
+        onClick={addCategoryHandler}
+      >
+        Add Category
+      </button>
+
+      <div>
+        {categories.map((cat, index) => {
+          return (
+            <p
+              key={index}
+              about={cat.category}
+              className={index === 0 ? "active" : ""}
+              onClick={addCategoryHandler}
+            >
+              {cat.category}
+            </p>
+          );
+        })}
+      </div>
 
       {Array.from(Array(imageNumber).keys()).map((data, index) => {
         return (
@@ -210,6 +245,18 @@ const ProductsFrom = ({
 };
 
 export default ProductsFrom;
+
+export interface ProductFormProps {
+  categorieList: CategoryResponse[];
+  formSubmitHandler: (eve: FormEvent<HTMLFormElement>) => void;
+  product: NewProductObject;
+  setProduct: React.Dispatch<React.SetStateAction<NewProductObject>>;
+}
+
+export interface FileObject {
+  data: File;
+  name: string;
+}
 
 const isParseAble = (str: string): boolean => {
   try {

@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ProductsRepository extends MongoRepository<ProductsEntity,String> {
 
-    List<ProductsEntity> findAllBySearchTagLineLike(String tagline);
+    List<ProductsEntity> findAllBySearchTagLineLike(String searchTagLine);
 
-    List<ProductsEntity> findAllByCategoriesContains(Category category);
+    List<ProductsEntity> findAllByCategoriesContains(Category categories);
 
 
 }
