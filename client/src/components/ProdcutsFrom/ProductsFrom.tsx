@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent , useState } from "react";
 import { CategoryResponse, NewProductObject } from "../NewProduct/NewProduct";
 const ProductsFrom = ({
   categorieList,
@@ -22,20 +22,18 @@ const ProductsFrom = ({
     setCategories(categories);
   };
 
-  const categoryOnDelete = (value: string) => {
-    const category = product.categories.filter((cat) => {
-      cat.category !== value;
-    });
-    setProduct((pre) => {
+  const categoryOnDelete=(value:string)=>{
+    setProduct(pre=>{
       return {
         ...pre,
-        categories: category,
-      };
+        categories: pre.categories.filter(cat=>cat.category !== value)
+      }
     });
-  };
+  }
 
-  const addCategoryHandler = () => {
-    const isPresent = product.categories.includes({ category: newCategory });
+  const addToCategoryList=(value:string)=>{
+
+    const isPresent = product.categories.includes({ category: value });
 
     if (!isPresent) {
       setProduct((pre) => {
@@ -44,14 +42,15 @@ const ProductsFrom = ({
           categories: [
             ...pre.categories,
             {
-              category: newCategory,
+              category: value,
             },
           ],
         };
       });
       setNewCategory("");
     }
-  };
+
+  }
 
   // Handler functions
 
@@ -168,9 +167,7 @@ const ProductsFrom = ({
           return (
             <div key={index}>
               <p>{cat.category}</p>
-              <button onClick={() => categoryOnDelete(cat.category)}>
-                Remove
-              </button>
+              <button onClick={()=>categoryOnDelete(cat.category)}>Remove</button>
             </div>
           );
         })}
@@ -185,12 +182,7 @@ const ProductsFrom = ({
           onChange={newCategoryChangeHandler}
         />
       </label>
-      <button
-        disabled={newCategory.length > 0 ? false : true}
-        onClick={addCategoryHandler}
-      >
-        Add Category
-      </button>
+      <button disabled={newCategory.length>0?false:true} onClick={()=>addToCategoryList(newCategory)}>Add Category</button>
 
       <div>
         {categories.map((cat, index) => {
@@ -199,7 +191,7 @@ const ProductsFrom = ({
               key={index}
               about={cat.category}
               className={index === 0 ? "active" : ""}
-              onClick={addCategoryHandler}
+              onClick={()=>addToCategoryList(cat.category)}
             >
               {cat.category}
             </p>

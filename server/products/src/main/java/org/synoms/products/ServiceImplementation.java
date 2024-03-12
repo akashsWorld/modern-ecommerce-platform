@@ -36,7 +36,6 @@ public class ServiceImplementation implements ProductsService, ImageService {
 
         List<Category> categories = categoryRepository.findAll();
 
-        System.out.println(categories);
         return new CategoryResponse(
                 categories.size(),
                 utilServices.convertToCategoryDTO(categories)
@@ -48,10 +47,11 @@ public class ServiceImplementation implements ProductsService, ImageService {
 
         List<Category> categories = utilServices.convertToCategoryList(productDTO.categories());
 
-        List<Category> newCategories = categories.stream().filter(category -> categoryRepository.exists(Example.of(category))).toList();
+
+
+        List<Category> newCategories = categories.stream().filter(category -> !categoryRepository.exists(Example.of(category))).toList();
 
         System.out.println(newCategories);
-
 
         categoryRepository.saveAll(newCategories);
 

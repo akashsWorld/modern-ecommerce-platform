@@ -35,11 +35,7 @@ const NewProduct = () => {
       description: product.description,
       productPrice: product.productPrice,
       discount: product.discount,
-      categories: product.categories.map(cat=>{
-        return {
-          category: cat
-        }
-      }),
+      categories: product.categories,
       specification: null,
     };
 
@@ -78,7 +74,6 @@ const NewProduct = () => {
     }
   };
 
-  
 
   return (
     <div>
