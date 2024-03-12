@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent , useState } from "react";
+import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { CategoryResponse, NewProductObject } from "../NewProduct/NewProduct";
 const ProductsFrom = ({
   categorieList,
@@ -10,29 +10,28 @@ const ProductsFrom = ({
   const [imageNumber, setImageNumber] = useState(1);
   const [newCategory, setNewCategory] = useState("");
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
+  const [categoryFieldIsFocus, setCategoryFieldIsFocus] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   const newCategoryChangeHandler = (eve: ChangeEvent<HTMLInputElement>) => {
     const value = eve.target.value;
     setNewCategory(value);
-
-    console.log(categorieList);
     const categories = categorieList.filter((cc) =>
       cc.category.toLowerCase().includes(value.toLowerCase())
     );
     setCategories(categories);
   };
 
-  const categoryOnDelete=(value:string)=>{
-    setProduct(pre=>{
+  const categoryOnDelete = (value: string) => {
+    setProduct((pre) => {
       return {
         ...pre,
-        categories: pre.categories.filter(cat=>cat.category !== value)
-      }
+        categories: pre.categories.filter((cat) => cat.category !== value),
+      };
     });
-  }
+  };
 
-  const addToCategoryList=(value:string)=>{
-
+  const addToCategoryList = (value: string) => {
     const isPresent = product.categories.includes({ category: value });
 
     if (!isPresent) {
@@ -49,8 +48,7 @@ const ProductsFrom = ({
       });
       setNewCategory("");
     }
-
-  }
+  };
 
   // Handler functions
 
@@ -167,13 +165,19 @@ const ProductsFrom = ({
           return (
             <div key={index}>
               <p>{cat.category}</p>
-              <button onClick={()=>categoryOnDelete(cat.category)}>Remove</button>
+              <button onClick={() => categoryOnDelete(cat.category)}>
+                Remove
+              </button>
             </div>
           );
         })}
       </div>
 
-      <label htmlFor="newCategory">
+      <label
+        htmlFor="newCategory"
+        onFocus={() => setCategoryFieldIsFocus(true)}
+        onBlur={() => setCategoryFieldIsFocus(false)}
+      >
         Category
         <input
           type="text"
@@ -182,22 +186,40 @@ const ProductsFrom = ({
           onChange={newCategoryChangeHandler}
         />
       </label>
-      <button disabled={newCategory.length>0?false:true} onClick={()=>addToCategoryList(newCategory)}>Add Category</button>
+      <button
+        disabled={newCategory.length > 0 ? false : true}
+        onClick={() => addToCategoryList(newCategory)}
+      >
+        Add Category
+      </button>
 
-      <div>
-        {categories.map((cat, index) => {
-          return (
-            <p
-              key={index}
-              about={cat.category}
-              className={index === 0 ? "active" : ""}
-              onClick={()=>addToCategoryList(cat.category)}
-            >
-              {cat.category}
-            </p>
-          );
-        })}
-      </div>
+      {categoryFieldIsFocus && (
+        <div>
+          {categories.map((cat, index) => {
+            return (
+              <p
+                key={index}
+                // TODO: Handle the active state change
+                about={cat.category}
+                onClick={() => addToCategoryList(cat.category)}
+                className={selectedCategory === 0 ? "active" : ""}
+                onKeyDown={() => {
+                  if (categories.length < selectedCategory) {
+                    setSelectedCategory((pre) => pre + 1);
+                  }
+                }}
+                onKeyUp={() => {
+                  if (selectedCategory > 0) {
+                    setSelectedCategory((pre) => pre - 1);
+                  }
+                }}
+              >
+                {cat.category}
+              </p>
+            );
+          })}
+        </div>
+      )}
 
       {Array.from(Array(imageNumber).keys()).map((data, index) => {
         return (
@@ -230,6 +252,8 @@ const ProductsFrom = ({
       >
         Add Image
       </div>
+
+      <div></div>
 
       <button type="submit">Upload</button>
     </form>

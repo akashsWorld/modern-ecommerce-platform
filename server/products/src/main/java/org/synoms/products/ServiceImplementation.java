@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.synoms.products.entity.Category;
 import org.synoms.client.products.CategoryResponse;
 import org.synoms.client.products.ProductDTO;
+import org.synoms.products.entity.Category;
 import org.synoms.products.entity.ProductImages;
 import org.synoms.products.entity.ProductsEntity;
 import org.synoms.products.exception.ProductNotFountException;
@@ -18,7 +18,6 @@ import org.synoms.products.service.ProductsService;
 import org.synoms.products.util.UtilServices;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,12 +45,9 @@ public class ServiceImplementation implements ProductsService, ImageService {
     public String saveProduct(ProductDTO productDTO) {
 
         List<Category> categories = utilServices.convertToCategoryList(productDTO.categories());
-
-
-
+        
         List<Category> newCategories = categories.stream().filter(category -> !categoryRepository.exists(Example.of(category))).toList();
 
-        System.out.println(newCategories);
 
         categoryRepository.saveAll(newCategories);
 
