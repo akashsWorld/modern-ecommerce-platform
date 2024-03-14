@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.synoms.client.products.CategoryResponse;
+import org.synoms.client.products.CategoryListDTO;
 import org.synoms.client.products.ProductDTO;
+import org.synoms.client.products.ProductListDTO;
 import org.synoms.products.entity.Category;
 import org.synoms.products.entity.ProductImages;
 import org.synoms.products.entity.ProductsEntity;
+import org.synoms.products.exception.ImageNotFoundException;
 import org.synoms.products.exception.ProductNotFountException;
+import org.synoms.products.exception.SearchParamException;
 import org.synoms.products.repository.CategoryRepository;
 import org.synoms.products.repository.ImageRepository;
 import org.synoms.products.repository.ProductsRepository;
@@ -31,11 +34,11 @@ public class ServiceImplementation implements ProductsService, ImageService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public CategoryResponse getAllCategories() {
+    public CategoryListDTO getAllCategories() {
 
         List<Category> categories = categoryRepository.findAll();
 
-        return new CategoryResponse(
+        return new CategoryListDTO(
                 categories.size(),
                 utilServices.convertToCategoryDTO(categories)
         );
@@ -74,6 +77,27 @@ public class ServiceImplementation implements ProductsService, ImageService {
     }
 
     @Override
+    public ProductListDTO getProducts(List<String> categorySearchParam, String searchTagLine) {
+        if((categorySearchParam == null && searchTagLine == null) ||
+                (categorySearchParam !=null && searchTagLine!=null)){
+            throw new SearchParamException("Invalid Search Param");
+        }
+
+
+        final List<ProductsEntity> productsEntities;
+
+        if(categorySearchParam==null){
+            productsEntities= productsRepository.findBySearchTagLineIgnoreCaseLike(searchTagLine.toLowerCase());
+        }else{
+            List<Category> categories =  utilServices.categories(categorySearchParam);
+            productsEntities = productsRepository.findByCategoriesContains(categories);
+        }
+
+
+        return new ProductListDTO(productsEntities.size(),utilServices.convertToProductDTO(productsEntities));
+    }
+
+    @Override
     public void saveImages(String id, List<MultipartFile> images) throws IOException {
         Optional<ProductsEntity> product = productsRepository.findById(id);
 
@@ -91,5 +115,11 @@ public class ServiceImplementation implements ProductsService, ImageService {
         productsEntity.setProductImages(proImagesFormDB);
         productsRepository.save(productsEntity);
 
+    }
+
+    @Override
+    public byte[] getImage(String imageId) {
+        ProductImages productImage = imageRepository.findById(imageId).orElseThrow(() -> new ImageNotFoundException("Image id Invalid."));
+        return productImage.getImage().getData().clone();
     }
 }

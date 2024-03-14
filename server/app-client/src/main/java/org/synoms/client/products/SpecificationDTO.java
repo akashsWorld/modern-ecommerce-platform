@@ -10,6 +10,5 @@ import lombok.Setter;
 @Setter
 public class SpecificationDTO {
 
-
     private String id;
 }
