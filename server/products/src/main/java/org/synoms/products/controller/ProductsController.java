@@ -1,12 +1,12 @@
 package org.synoms.products.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.synoms.client.products.CategoryListDTO;
 import org.synoms.client.products.ProductDTO;
-import org.synoms.client.products.ProductListDTO;
 import org.synoms.products.service.ProductsService;
 
 import java.util.List;
@@ -21,11 +21,16 @@ public class ProductsController {
 
 
     @GetMapping
-    public ResponseEntity<ProductListDTO> getProducts(
+    public ResponseEntity<Page<ProductDTO>> getProducts(
             @RequestParam(name = "category",required = false) List<String> category,
-            @RequestParam(name = "searchName",required = false) String searchTagLine
+            @RequestParam(name = "searchName",required = false) String searchTagLine,
+            @RequestParam(name = "page",required = false,defaultValue = "0") Integer pageNumber,
+            @RequestParam(name="pageSize",required = false,defaultValue = "20") Integer pageSize,
+            @RequestParam(name="fieldName",required = false,defaultValue = "launchDate") String fieldName
     ){
-        return ResponseEntity.ok(productsService.getProducts(category,searchTagLine));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                productsService.getProducts(category,searchTagLine,pageNumber,pageSize,fieldName)
+        );
     }
 
     @PostMapping(consumes = {"application/json"})
@@ -47,6 +52,8 @@ public class ProductsController {
     public ResponseEntity<CategoryListDTO> getAllProductCategories() {
         return ResponseEntity.ok().body(productsService.getAllCategories());
     }
+
+
 
 
 }

@@ -1,5 +1,6 @@
 package org.synoms.products.exception;
 
+
 public class SearchParamException extends RuntimeException{
     public SearchParamException() {
         super();

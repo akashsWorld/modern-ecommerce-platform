@@ -4,12 +4,8 @@ package org.synoms.products.util;
 import org.bson.types.Binary;
 import org.springframework.web.multipart.MultipartFile;
 import org.synoms.client.products.CategoryDTO;
-import org.synoms.client.products.ProductDTO;
-import org.synoms.client.products.SpecificationDTO;
 import org.synoms.products.entity.Category;
 import org.synoms.products.entity.ProductImages;
-import org.synoms.products.entity.ProductsEntity;
-import org.synoms.products.entity.Specification;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,22 +75,4 @@ public class UtilServices {
     public List<Category> categories (List<String> categories){
         return categories.stream().map(name-> Category.builder().name(name).build()).toList();
     }
-
-    public List<ProductDTO> convertToProductDTO(List<ProductsEntity> productsEntities){
-        return productsEntities.stream().map(cc-> new ProductDTO(
-                cc.getProductId(),
-                cc.getProductName(),
-                cc.getDescription(),
-                cc.getPrice(),
-                cc.getDiscount(),
-                null,
-                null,
-                cc.getLaunchDate())).toList();
-    }
-
-    public SpecificationDTO toSpecificationDTO(Specification specification){
-        return new SpecificationDTO();
-    }
-
-
 }

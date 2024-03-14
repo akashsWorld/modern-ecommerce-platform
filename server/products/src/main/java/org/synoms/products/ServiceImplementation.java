@@ -1,12 +1,11 @@
 package org.synoms.products;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.synoms.client.products.CategoryListDTO;
 import org.synoms.client.products.ProductDTO;
-import org.synoms.client.products.ProductListDTO;
 import org.synoms.products.entity.Category;
 import org.synoms.products.entity.ProductImages;
 import org.synoms.products.entity.ProductsEntity;
@@ -18,6 +17,7 @@ import org.synoms.products.repository.ImageRepository;
 import org.synoms.products.repository.ProductsRepository;
 import org.synoms.products.service.ImageService;
 import org.synoms.products.service.ProductsService;
+import org.synoms.products.util.DTOConverter;
 import org.synoms.products.util.UtilServices;
 
 import java.io.IOException;
@@ -77,24 +77,30 @@ public class ServiceImplementation implements ProductsService, ImageService {
     }
 
     @Override
-    public ProductListDTO getProducts(List<String> categorySearchParam, String searchTagLine) {
+    public Page<ProductDTO> getProducts(List<String> categorySearchParam,
+                                        String searchTagLine,
+                                        Integer pageNumber,
+                                        Integer pageSize,
+                                        String fieldName) {
         if((categorySearchParam == null && searchTagLine == null) ||
                 (categorySearchParam !=null && searchTagLine!=null)){
             throw new SearchParamException("Invalid Search Param");
         }
 
 
-        final List<ProductsEntity> productsEntities;
+        final Page<ProductsEntity> productsEntities;
+
+        final Pageable pageable = PageRequest.of(pageNumber,pageSize,Sort.by(Sort.Order.desc(fieldName)));
 
         if(categorySearchParam==null){
-            productsEntities= productsRepository.findBySearchTagLineIgnoreCaseLike(searchTagLine.toLowerCase());
+            productsEntities= productsRepository.findBySearchTagLineIgnoreCaseLike(searchTagLine.toLowerCase(),pageable);
         }else{
             List<Category> categories =  utilServices.categories(categorySearchParam);
-            productsEntities = productsRepository.findByCategoriesContains(categories);
+            productsEntities = productsRepository.findByCategoriesContains(categories,pageable);
         }
 
 
-        return new ProductListDTO(productsEntities.size(),utilServices.convertToProductDTO(productsEntities));
+        return productsEntities.map(DTOConverter::convertToProductDTO);
     }
 
     @Override
@@ -114,7 +120,6 @@ public class ServiceImplementation implements ProductsService, ImageService {
         ProductsEntity productsEntity = product.get();
         productsEntity.setProductImages(proImagesFormDB);
         productsRepository.save(productsEntity);
-
     }
 
     @Override

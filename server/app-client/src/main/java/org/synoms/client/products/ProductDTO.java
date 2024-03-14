@@ -11,7 +11,7 @@ public record ProductDTO(
     Integer discount,
     List<CategoryDTO> categories,
     SpecificationDTO specification,
-    LocalDateTime launchDate
-
+    LocalDateTime launchDate,
+    RatingDTO ratingDTO
 ) {
 }
