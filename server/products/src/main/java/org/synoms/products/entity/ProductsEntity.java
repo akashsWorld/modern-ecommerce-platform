@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Document(value = "product")
 @AllArgsConstructor
@@ -42,12 +43,12 @@ public class ProductsEntity {
     private String searchTagLine;
 
     @Indexed(name = "_specification")
-    private Specification specification;
+    private Map<String,Map<String,String>> specification;
 
     @Indexed(name = "_launch_date")
     private LocalDateTime launchDate;
 
     @Indexed(name = "_ratings")
+    @DocumentReference
     private List<Rating> rating;
-
 }

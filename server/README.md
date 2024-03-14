@@ -38,11 +38,11 @@
 - [ ] Cancel Order.
 - [ ] Update Order address.
 - [ ] Update Order quantity.
-- [ ] Order verfication.
+- [ ] Order verification.
 - [ ] Get all orders based on region.
 - [ ] Get all customer based on product.
 - [ ] Update order status.
-- [ ] Get all orders by particular cutomer.
+- [ ] Get all orders by particular customer.
 - [ ] Update order on delivered.
 - [ ] Order shipment status.
 - [ ] Add shipment method.

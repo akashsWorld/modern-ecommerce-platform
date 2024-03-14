@@ -10,6 +10,7 @@ import org.synoms.client.products.ProductDTO;
 import org.synoms.products.service.ProductsService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/products")
@@ -53,7 +54,15 @@ public class ProductsController {
         return ResponseEntity.ok().body(productsService.getAllCategories());
     }
 
-
+//    @GetMapping(value = "/demo")
+//    public String demoEntity(@RequestBody Map<?,?> data){
+//
+//        data.keySet().forEach(cc->{
+//            System.out.println(cc.getClass());
+//        });
+//
+//        return "Hello World";
+//    }
 
 
 }
