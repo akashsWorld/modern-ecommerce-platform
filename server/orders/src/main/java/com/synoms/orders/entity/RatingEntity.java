@@ -1,4 +1,5 @@
-package org.synoms.products.entity;
+package com.synoms.orders.entity;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Rating {
+public class RatingEntity {
     @Id
     private String id;
     @Indexed(name = "_customer_id")
@@ -28,3 +29,4 @@ public class Rating {
     @Indexed(name = "_sample_photos")
     private List<String> samplePhotos;
 }
+

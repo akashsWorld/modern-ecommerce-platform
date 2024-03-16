@@ -10,5 +10,5 @@ public interface ProductsService {
     CategoryListDTO getAllCategories();
     String saveProduct(ProductDTO productDTO);
     Page<ProductDTO> getProducts(List<String> category, String searchTagLine, Integer pageNumber, Integer pageSize,String fieldName);
-
+    ProductDTO getProductById(String productId);
 }

@@ -1,4 +1,5 @@
 {
     "editor.fontSize": 19,
-    "editor.accessibilityPageSize": 19
+    "editor.accessibilityPageSize": 19,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

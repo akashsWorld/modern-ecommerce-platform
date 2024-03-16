@@ -1,5 +1,7 @@
 package org.synoms.client.products;
 
+import org.synoms.client.orders.RatingDTO;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

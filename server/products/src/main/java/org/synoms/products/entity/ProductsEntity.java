@@ -26,8 +26,8 @@ public class ProductsEntity {
     @Indexed(name = "_description")
     private String description;
 
-    @DocumentReference
     @Indexed(name = "_product_images")
+    @DocumentReference
     private List<ProductImages> productImages;
 
     @Indexed(name = "_price")
@@ -48,7 +48,7 @@ public class ProductsEntity {
     @Indexed(name = "_launch_date")
     private LocalDateTime launchDate;
 
-    @Indexed(name = "_ratings")
+    @Indexed(name="_accessories")
     @DocumentReference
-    private List<Rating> rating;
+    private List<ProductsEntity> accessories;
 }

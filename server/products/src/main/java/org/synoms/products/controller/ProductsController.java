@@ -1,5 +1,6 @@
 package org.synoms.products.controller;
 
+import feign.form.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class ProductsController {
     private final ProductsService productsService;
 
 
-    @GetMapping
+    @GetMapping(produces = {"application/json"},consumes = {"application/json"})
     public ResponseEntity<Page<ProductDTO>> getProducts(
             @RequestParam(name = "category",required = false) List<String> category,
             @RequestParam(name = "searchName",required = false) String searchTagLine,
@@ -34,7 +35,12 @@ public class ProductsController {
         );
     }
 
-    @PostMapping(consumes = {"application/json"})
+    @GetMapping(value = "/{productId}",produces = {"application/json"}, consumes = {"application/json"} )
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable String productId){
+        return ResponseEntity.status(HttpStatus.OK).body(productsService.getProductById(productId));
+    }
+
+    @PostMapping(produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<String> saveProduct(@RequestBody ProductDTO productDTO){
        return ResponseEntity.status(HttpStatus.CREATED).body(productsService.saveProduct(productDTO));
     }
@@ -46,6 +52,7 @@ public class ProductsController {
             @RequestBody List<ProductDTO> productDTOS
             ){
 
+//        TODO: Have to implement the logic of saving multiple products.
 
     }
 

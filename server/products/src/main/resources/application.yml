@@ -18,3 +18,7 @@ spring:
     name: products
 server:
   port: 8081
+
+order:
+  service:
+    url: http://localhost:8082/

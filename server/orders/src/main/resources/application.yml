@@ -3,3 +3,14 @@ server:
 spring:
   application:
     name: orders
+
+  data:
+    mongodb:
+      authentication-database: admin
+      username: synoms
+      password: synoms
+      database: orders
+      host: mongodb
+      port: 27017
+      uri: mongodb://synoms:synoms@localhost:27017/
+      auto-index-creation: true

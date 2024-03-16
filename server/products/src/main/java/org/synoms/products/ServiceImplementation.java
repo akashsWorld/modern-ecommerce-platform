@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.synoms.client.orders.RatingDTO;
 import org.synoms.client.products.CategoryListDTO;
 import org.synoms.client.products.ProductDTO;
+import org.synoms.products.config.OrderServiceClient;
 import org.synoms.products.entity.Category;
 import org.synoms.products.entity.ProductImages;
 import org.synoms.products.entity.ProductsEntity;
@@ -32,6 +34,7 @@ public class ServiceImplementation implements ProductsService, ImageService {
     private final ProductsRepository productsRepository;
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
+    private final OrderServiceClient orderServiceClient;
 
     @Override
     public CategoryListDTO getAllCategories() {
@@ -101,6 +104,37 @@ public class ServiceImplementation implements ProductsService, ImageService {
 
 
         return productsEntities.map(DTOConverter::convertToProductDTO);
+    }
+
+    @Override
+    public ProductDTO getProductById(String productId) {
+
+        Optional<ProductsEntity> productsEntityOptional = productsRepository.findById(productId);
+
+        if(productsEntityOptional.isEmpty()){
+            throw new ProductNotFountException("Invalid product");
+        }
+        ProductsEntity product = productsEntityOptional.get();
+
+//        TODO: have to implement the accessories section in the product.
+
+        List<RatingDTO> ratingDTOS = orderServiceClient.getAllRatingsByProductId(productId);
+
+
+
+        return new ProductDTO(
+                productId,
+                product.getProductName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getDiscount(),
+                null,
+                null,
+                product.getSpecification(),
+                product.getLaunchDate(),
+                ratingDTOS,
+                null
+        );
     }
 
     @Override

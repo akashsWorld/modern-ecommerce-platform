@@ -1,8 +1,11 @@
 package org.synoms.products.util;
 
 
+import org.synoms.client.products.AccessoriesDTO;
 import org.synoms.client.products.ProductDTO;
 import org.synoms.products.entity.ProductsEntity;
+
+import java.util.List;
 
 public class DTOConverter {
 
@@ -20,5 +23,11 @@ public class DTOConverter {
                 null,
                 null);
     }
+
+    public static AccessoriesDTO convertToAccessoriesDTO(List<ProductsEntity> accessories){
+//        TODO: Have to implement the logic of create Accessories DTO.
+        return null;
+    }
+
 
 }
