@@ -13,6 +13,7 @@
   <modules>
     <module>products</module>
     <module>app-client</module>
+      <module>orders</module>
   </modules>
 
 
