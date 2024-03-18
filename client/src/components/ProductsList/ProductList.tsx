@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React from 'react'
 import {json} from 'react-router-dom'
-import './product-list.scss'
 
 const ProductList = () => {
   return (

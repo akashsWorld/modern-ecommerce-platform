@@ -13,7 +13,7 @@ public record ProductDTO(
         Double productPrice,
         Integer discount,
         List<String> highlights,
-        List<CategoryDTO> categories,
+        CategoryNameDTO categories,
         Map<String, Map<String,String>> specification,
         LocalDateTime launchDate,
         List<RatingDTO> ratings,

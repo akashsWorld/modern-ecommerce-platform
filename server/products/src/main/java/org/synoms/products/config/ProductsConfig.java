@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import org.synoms.products.util.ConvertToList;
 import org.synoms.products.util.SortOnObject;
 import org.synoms.products.util.UtilServices;
 
@@ -39,6 +40,11 @@ public class ProductsConfig {
     @Bean
     protected OrderServiceClient orderServiceClient(RestTemplate restTemplate, Environment environment , HttpHeaders httpHeaders){
         return new OrderServiceClient(environment,restTemplate,httpHeaders);
+    }
+
+    @Bean
+    protected ConvertToList convertToList(){
+        return new ConvertToList();
     }
 
 }

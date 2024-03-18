@@ -3,8 +3,8 @@ package org.synoms.products.util;
 
 import org.bson.types.Binary;
 import org.springframework.web.multipart.MultipartFile;
-import org.synoms.client.products.CategoryDTO;
-import org.synoms.products.entity.Category;
+import org.synoms.client.products.CategoryNameDTO;
+import org.synoms.products.entity.CategoryEntity;
 import org.synoms.products.entity.ProductImages;
 
 import java.io.IOException;
@@ -13,15 +13,15 @@ import java.util.List;
 
 public class UtilServices {
 
-    public String getProductTagline(String productName, List<CategoryDTO> categories, String description){
+    public String getProductTagline(String productName, List<String> categories, String description){
 
         StringBuilder tagline = new StringBuilder();
 
         tagline.append(productName);
         tagline.append(description);
 
-        for(CategoryDTO category : categories){
-            tagline.append(category.category().toLowerCase());
+        for(String category : categories){
+            tagline.append(category.toLowerCase());
         }
 
         return tagline.toString();
@@ -51,16 +51,12 @@ public class UtilServices {
                 .build();
     }
 
-    public List<CategoryDTO> convertToCategoryDTO(List<Category> categories){
 
 
-        return categories.stream().map(cat-> new CategoryDTO(cat.getName())).toList();
-    }
-
-    public List<Category> convertToCategoryList(List<CategoryDTO> categoryDTOS){
-        return categoryDTOS.stream().map(categoryDTO -> Category.builder()
-                .name(toCapitalize(categoryDTO.category()))
-                .categorySearchName(categoryDTO.category().toLowerCase())
+    public List<CategoryEntity> convertToCategoryList(List<String> categoryDTOS){
+        return categoryDTOS.stream().map(categoryDTO -> CategoryEntity.builder()
+                .name(toCapitalize(categoryDTO))
+                .categorySearchName(categoryDTO.toLowerCase())
                 .build()).toList();
     }
 
@@ -72,7 +68,7 @@ public class UtilServices {
         return ch + str.substring(1);
     }
 
-    public List<Category> categories (List<String> categories){
-        return categories.stream().map(name-> Category.builder().name(name).build()).toList();
+    public List<CategoryEntity> categories (List<String> categories){
+        return categories.stream().map(name-> CategoryEntity.builder().name(name).build()).toList();
     }
 }

@@ -37,7 +37,7 @@ public class ProductsEntity {
     private Integer discount;
 
     @Indexed(name = "_categories")
-    private List<Category> categories;
+    private List<CategoryEntity> categories;
 
     @Indexed(name = "_tag_line")
     private String searchTagLine;

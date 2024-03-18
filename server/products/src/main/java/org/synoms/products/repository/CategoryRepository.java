@@ -1,7 +1,7 @@
 package org.synoms.products.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.synoms.products.entity.Category;
+import org.synoms.products.entity.CategoryEntity;
 
-public interface CategoryRepository extends MongoRepository<Category,String> {
+public interface CategoryRepository extends MongoRepository<CategoryEntity,String> {
 }

@@ -1,123 +1,71 @@
-import React, { FormEvent, useState } from "react";
-import './new-product.scss';
-import ProductsFrom from "../ProdcutsFrom/ProductsFrom";
+import React, { useState } from "react";
+import { json, useLoaderData } from "react-router-dom";
 import axios from "axios";
-import { json, useLoaderData, useNavigate } from "react-router-dom";
-import { FileObject } from "../ProdcutsFrom/ProductsFrom";
+import ProductsFrom from "../ProdcutsFrom/ProductsFrom";
+import { Button, Typography } from "@mui/material";
 
 const NewProduct = () => {
-  const categories = useLoaderData() as NewProductResponse;
+  const data = useLoaderData();
 
+  const [product, setProduct] = useState<NewProductObject[]>();
 
-  const navigate = useNavigate();
-
-  const [product, setProduct] = useState<NewProductObject>({
-    productName: "",
-    description: "",
-    images: [],
-    productPrice: 0,
-    discount: 0,
-    categories:[],
-  });
-
-  const onFromSubmit = async (eve: FormEvent<HTMLFormElement>) => {
-    eve.preventDefault();
-
-    const formData = new FormData();
-
-    product.images.map((curr, index) => {
-      formData.append("productImages", curr.data, `image-${index}`);
-      return curr;
-    });
-
-    const data = {
-      productName: product.productName,
-      description: product.description,
-      productPrice: product.productPrice,
-      discount: product.discount,
-      categories: product.categories,
-      specification: null,
-    };
-
-    const savProductResponse = await axios.post(
-      "http://localhost:8081/products",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (savProductResponse.status === 201) {
-      // const id = savProductResponse.data;
-      const id = savProductResponse.data;
-
-      const saveImageResponse = await axios.post(`http://localhost:8081/images/${id}`,formData);
-
-      if (saveImageResponse.status===204) {
-        
-        navigate("/admin");
-        return;
-      } else {
-        const data = await saveImageResponse.data;
-        throw json({
-          status: saveImageResponse.status,
-          message: data.message,
-        });
-      }
-    } else {
-      throw json({
-        status: savProductResponse.status,
-        message: savProductResponse.data.message,
-      });
-    }
-  };
-
+  const [productNumber, setProductNumber] = useState<number>(1);
 
   return (
-    <div>
-      <ProductsFrom
-        categorieList={categories.categories}
-        formSubmitHandler={onFromSubmit}
-        product={product}
-        setProduct={setProduct}
-      />
+    <div className="flex flex-col m-3 bg-slate-200">
+      {Array.from(Array(productNumber)).map((product, index) => (
+        <div key={index}  className="border-dashed border-gray-400 rounded-md border m-2">
+          <div className="m-2">
+            <Typography variant="h5" gutterBottom>
+              {`Product ${index + 1}`}
+            </Typography>
+          </div>
+          <ProductsFrom productNumber={index} />
+        </div>
+      ))}
+      <div className="m-3 justify-between">
+        <div className="inline-block">
+          <Button
+            onClick={() => setProductNumber((pre) => pre + 1)}
+            variant="contained"
+          >
+            Add Product
+          </Button>
+        </div>
+        <div className="ml-2 inline-block">
+          <Button
+            onClick={() => setProductNumber((pre) => pre - 1)}
+            disabled={productNumber === 1 ? true : false}
+            variant="contained"
+            color="secondary"
+          >
+            Remove Last
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default NewProduct;
 
-export const loader = async (): Promise<string[]> => {
+export const loader = async (): Promise<NewProductResponse> => {
   const url = "http://localhost:8081/products/categories";
 
   const response = await axios.get(url);
 
-  if(response.status===200){
+  if (response.status === 200) {
     return response.data;
   }
   throw json({
-    status:response.status,
-    message:'Some error occured'
-  })
+    status: response.status,
+    message: "Some error occured",
+  });
 };
 
-
-export interface CategoryResponse{
-  category:string
-}
 export interface NewProductResponse {
-  result: number;
-  categories: CategoryResponse[];
+  categoriesList: string[];
+  specificationList: string[];
 }
 
-export interface NewProductObject {
-  productName: string;
-  description: string;
-  images: FileObject[];
-  productPrice: number;
-  discount: number;
-  categories: CategoryResponse [];
-}
-
+export interface NewProductObject {}

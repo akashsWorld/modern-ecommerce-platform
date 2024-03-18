@@ -5,20 +5,25 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.synoms.client.orders.RatingDTO;
-import org.synoms.client.products.CategoryListDTO;
+import org.synoms.client.products.CategoryNameDTO;
+import org.synoms.client.products.CategorySpecificationListDTO;
 import org.synoms.client.products.ProductDTO;
+import org.synoms.client.products.SpecificationNameDTO;
 import org.synoms.products.config.OrderServiceClient;
-import org.synoms.products.entity.Category;
+import org.synoms.products.entity.CategoryEntity;
 import org.synoms.products.entity.ProductImages;
 import org.synoms.products.entity.ProductsEntity;
+import org.synoms.products.entity.SpecificationEntity;
 import org.synoms.products.exception.ImageNotFoundException;
 import org.synoms.products.exception.ProductNotFountException;
 import org.synoms.products.exception.SearchParamException;
 import org.synoms.products.repository.CategoryRepository;
 import org.synoms.products.repository.ImageRepository;
 import org.synoms.products.repository.ProductsRepository;
+import org.synoms.products.repository.SpecificationRepository;
 import org.synoms.products.service.ImageService;
 import org.synoms.products.service.ProductsService;
+import org.synoms.products.util.ConvertToList;
 import org.synoms.products.util.DTOConverter;
 import org.synoms.products.util.UtilServices;
 
@@ -35,24 +40,27 @@ public class ServiceImplementation implements ProductsService, ImageService {
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
     private final OrderServiceClient orderServiceClient;
+    private final SpecificationRepository specificationRepository;
+    private final ConvertToList convertToList;
 
     @Override
-    public CategoryListDTO getAllCategories() {
+    public CategorySpecificationListDTO getAllCategoriesAndSpecificationNames () {
 
-        List<Category> categories = categoryRepository.findAll();
+        List<CategoryEntity> categories = categoryRepository.findAll();
+        List<SpecificationEntity> specifications = specificationRepository.findAll();
 
-        return new CategoryListDTO(
-                categories.size(),
-                utilServices.convertToCategoryDTO(categories)
+        return new CategorySpecificationListDTO(
+                convertToList.convertCategoryEntityToNameList(categories),
+                convertToList.convertSepcificationToNameList(specifications)
         );
     }
 
     @Override
     public String saveProduct(ProductDTO productDTO) {
 
-        List<Category> categories = utilServices.convertToCategoryList(productDTO.categories());
+        List<CategoryEntity> categories = utilServices.convertToCategoryList(productDTO.categories().categoryList());
         
-        List<Category> newCategories = categories.stream().filter(category -> !categoryRepository.exists(Example.of(category))).toList();
+        List<CategoryEntity> newCategories = categories.stream().filter(category -> !categoryRepository.exists(Example.of(category))).toList();
 
 
         categoryRepository.saveAll(newCategories);
@@ -60,7 +68,7 @@ public class ServiceImplementation implements ProductsService, ImageService {
 
         String tagline = utilServices.getProductTagline(
                 productDTO.productName(),
-                productDTO.categories(),
+                productDTO.categories().categoryList(),
                 productDTO.description()
         );
 
@@ -98,7 +106,7 @@ public class ServiceImplementation implements ProductsService, ImageService {
         if(categorySearchParam==null){
             productsEntities= productsRepository.findBySearchTagLineIgnoreCaseLike(searchTagLine.toLowerCase(),pageable);
         }else{
-            List<Category> categories =  utilServices.categories(categorySearchParam);
+            List<CategoryEntity> categories =  utilServices.categories(categorySearchParam);
             productsEntities = productsRepository.findByCategoriesContains(categories,pageable);
         }
 

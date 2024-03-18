@@ -1,5 +1,4 @@
 import React from 'react'
-import './landing-content.scss'
 const LandingContent = () => {
   return (
     <h1>

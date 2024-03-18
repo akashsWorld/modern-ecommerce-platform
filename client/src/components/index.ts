@@ -6,7 +6,9 @@ import ProductCard from "./ProductCard/ProductCard";
 import ProductsFrom from "./ProdcutsFrom/ProductsFrom";
 import Loading from "./LoadingContent/Loading";
 import LandingContent from "./LandingContent/LandingContent";
-import NewProduct  from "./NewProduct/NewProduct";
+import NewProduct from "./NewProduct/NewProduct";
+import Specification from "./Specification/Specification";
+import Categories from "./Categories/Categories";
 
 export {
   AdminDashBoard,
@@ -17,5 +19,7 @@ export {
   ProductsFrom,
   Loading,
   LandingContent,
-  NewProduct
+  NewProduct,
+  Specification,
+  Categories
 };
