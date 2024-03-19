@@ -9,7 +9,7 @@ import LandingContent from "./LandingContent/LandingContent";
 import NewProduct from "./NewProduct/NewProduct";
 import Specification from "./Specification/Specification";
 import Categories from "./Categories/Categories";
-
+import FileUpload from "./FileUpload/FileUpload";
 export {
   AdminDashBoard,
   HomeNavigation,
@@ -21,5 +21,6 @@ export {
   LandingContent,
   NewProduct,
   Specification,
-  Categories
+  Categories,
+  FileUpload,
 };

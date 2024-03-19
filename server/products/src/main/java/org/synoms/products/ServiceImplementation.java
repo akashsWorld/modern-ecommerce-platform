@@ -58,7 +58,7 @@ public class ServiceImplementation implements ProductsService, ImageService {
     @Override
     public String saveProduct(ProductDTO productDTO) {
 
-        List<CategoryEntity> categories = utilServices.convertToCategoryList(productDTO.categories().categoryList());
+        List<CategoryEntity> categories = utilServices.convertToCategoryList(productDTO.categories());
         
         List<CategoryEntity> newCategories = categories.stream().filter(category -> !categoryRepository.exists(Example.of(category))).toList();
 
@@ -68,7 +68,7 @@ public class ServiceImplementation implements ProductsService, ImageService {
 
         String tagline = utilServices.getProductTagline(
                 productDTO.productName(),
-                productDTO.categories().categoryList(),
+                productDTO.categories(),
                 productDTO.description()
         );
 
@@ -134,6 +134,7 @@ public class ServiceImplementation implements ProductsService, ImageService {
                 productId,
                 product.getProductName(),
                 product.getDescription(),
+                product.getProductQuantity(),
                 product.getPrice(),
                 product.getDiscount(),
                 null,

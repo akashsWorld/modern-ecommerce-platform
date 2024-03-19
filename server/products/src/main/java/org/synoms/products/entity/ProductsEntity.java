@@ -26,6 +26,9 @@ public class ProductsEntity {
     @Indexed(name = "_description")
     private String description;
 
+    @Indexed(name = "_quantity")
+    private Integer productQuantity;
+
     @Indexed(name = "_product_images")
     @DocumentReference
     private List<ProductImages> productImages;

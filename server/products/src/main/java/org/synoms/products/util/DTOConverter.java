@@ -14,6 +14,7 @@ public class DTOConverter {
                 productEntity.getProductId(),
                 productEntity.getProductName(),
                 productEntity.getDescription(),
+                productEntity.getProductQuantity(),
                 productEntity.getPrice(),
                 productEntity.getDiscount(),
                 null,

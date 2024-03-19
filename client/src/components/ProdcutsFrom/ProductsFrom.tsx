@@ -4,9 +4,11 @@ import Categories from "../Categories/Categories";
 import Specification from "../Specification/Specification";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import FileUploadButton from "../FileUploadButton/FileUploadButton";
+import FileUploadButton from "../AddProductImages/AddProductImages";
+import { NewProductObject } from "../NewProduct/NewProduct";
 
-const ProductsFrom = ({ productNumber }: ProductsFromProps) => {
+const ProductsFrom = ({ productNumber ,product, setProducts }: ProductsFromProps) => {
+  
   
 
   return (
@@ -22,7 +24,7 @@ const ProductsFrom = ({ productNumber }: ProductsFromProps) => {
       <Categories name="Categories" />
       <Specification />
       <DateTimePicker label="Date" defaultValue={dayjs(Date.now())} />
-      <FileUploadButton/>
+      <FileUploadButton product={product} setProducts={setProducts} />
     </Box>
     </div>
   );
@@ -31,5 +33,7 @@ const ProductsFrom = ({ productNumber }: ProductsFromProps) => {
 export default ProductsFrom;
 
 export interface ProductsFromProps {
+  product: NewProductObject;
+  setProducts: React.Dispatch<React.SetStateAction<NewProductObject[]>>
   productNumber: number;
 }
