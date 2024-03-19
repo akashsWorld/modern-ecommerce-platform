@@ -1,9 +1,10 @@
 import React from "react";
-import { Box, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import Categories from "../Categories/Categories";
 import Specification from "../Specification/Specification";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import FileUploadButton from "../FileUploadButton/FileUploadButton";
 
 const ProductsFrom = ({ productNumber }: ProductsFromProps) => {
   
@@ -21,6 +22,7 @@ const ProductsFrom = ({ productNumber }: ProductsFromProps) => {
       <Categories name="Categories" />
       <Specification />
       <DateTimePicker label="Date" defaultValue={dayjs(Date.now())} />
+      <FileUploadButton/>
     </Box>
     </div>
   );
