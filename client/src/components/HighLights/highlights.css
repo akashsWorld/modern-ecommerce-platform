@@ -1,0 +1,6 @@
+@tailwind components;
+@layer components{
+    .highlights-icon__hover{
+        @apply bg-slate-300 cursor-pointer
+    }
+}

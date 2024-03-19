@@ -22,7 +22,7 @@ const initialProduct = {
 };
 
 const NewProduct = () => {
-  const data = useLoaderData();
+  const data = useLoaderData() as NewProductResponse;
 
   const [products, setProducts] = useState<NewProductObject[]>([
     initialProduct,
@@ -68,9 +68,10 @@ const NewProduct = () => {
           </div>
           <div>
             <ProductsFrom
-              productNumber={index}
-              product={product}
-              setProducts={setProducts}
+            categoryList={data.categoriesList}
+              productProp={{productNumber:index,
+              product:product,
+              setProducts:setProducts}}
             />
           </div>
         </div>

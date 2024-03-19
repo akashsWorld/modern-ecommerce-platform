@@ -10,6 +10,8 @@ import NewProduct from "./NewProduct/NewProduct";
 import Specification from "./Specification/Specification";
 import Categories from "./Categories/Categories";
 import FileUpload from "./FileUpload/FileUpload";
+import Highlights from "./HighLights/Highlights";
+import AddProductImages from "./AddProductImages/AddProductImages";
 export {
   AdminDashBoard,
   HomeNavigation,
@@ -22,5 +24,7 @@ export {
   NewProduct,
   Specification,
   Categories,
+  AddProductImages,
   FileUpload,
+  Highlights
 };

@@ -4,8 +4,13 @@ import styled from "@emotion/styled";
 import { Add, Delete } from "@mui/icons-material";
 import FileUpload from "../FileUpload/FileUpload";
 import { NewProductObject } from "../NewProduct/NewProduct";
+import { ProductFormProps } from "../../types/product-form-props";
 
-const AddProductImages = ({ product, setProducts }: AddProductImagesProps) => {
+const AddProductImages = ({
+  productNumber,
+  product,
+  setProducts,
+}: ProductFormProps) => {
   const onDeleteHandle = (index: number) => {};
 
   const [pictureNumber, setPictureNumber] = useState(1);
@@ -47,8 +52,3 @@ const AddProductImages = ({ product, setProducts }: AddProductImagesProps) => {
 };
 
 export default AddProductImages;
-
-export interface AddProductImagesProps {
-  product: NewProductObject;
-  setProducts: React.Dispatch<React.SetStateAction<NewProductObject[]>>;
-}
