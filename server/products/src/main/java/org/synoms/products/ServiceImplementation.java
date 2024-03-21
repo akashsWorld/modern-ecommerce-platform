@@ -5,10 +5,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.synoms.client.orders.RatingDTO;
-import org.synoms.client.products.CategoryNameDTO;
 import org.synoms.client.products.CategorySpecificationListDTO;
 import org.synoms.client.products.ProductDTO;
-import org.synoms.client.products.SpecificationNameDTO;
 import org.synoms.products.config.OrderServiceClient;
 import org.synoms.products.entity.CategoryEntity;
 import org.synoms.products.entity.ProductImages;
@@ -23,7 +21,7 @@ import org.synoms.products.repository.ProductsRepository;
 import org.synoms.products.repository.SpecificationRepository;
 import org.synoms.products.service.ImageService;
 import org.synoms.products.service.ProductsService;
-import org.synoms.products.util.ConvertToList;
+import org.synoms.products.util.ConvertToNameList;
 import org.synoms.products.util.DTOConverter;
 import org.synoms.products.util.UtilServices;
 
@@ -41,7 +39,7 @@ public class ServiceImplementation implements ProductsService, ImageService {
     private final CategoryRepository categoryRepository;
     private final OrderServiceClient orderServiceClient;
     private final SpecificationRepository specificationRepository;
-    private final ConvertToList convertToList;
+    private final ConvertToNameList convertToNameList;
 
     @Override
     public CategorySpecificationListDTO getAllCategoriesAndSpecificationNames () {
@@ -50,41 +48,16 @@ public class ServiceImplementation implements ProductsService, ImageService {
         List<SpecificationEntity> specifications = specificationRepository.findAll();
 
         return new CategorySpecificationListDTO(
-                convertToList.convertCategoryEntityToNameList(categories),
-                convertToList.convertSepcificationToNameList(specifications)
+                convertToNameList.convertCategoryEntityToNameList(categories),
+                convertToNameList.convertSepcificationToNameList(specifications)
         );
     }
 
     @Override
-    public String saveProduct(ProductDTO productDTO) {
+    public List<String> saveProducts(List<ProductDTO> productDTO) {
+//        TODO: implement the logic to save all the product.
 
-        List<CategoryEntity> categories = utilServices.convertToCategoryList(productDTO.categories());
-        
-        List<CategoryEntity> newCategories = categories.stream().filter(category -> !categoryRepository.exists(Example.of(category))).toList();
-
-
-        categoryRepository.saveAll(newCategories);
-
-
-        String tagline = utilServices.getProductTagline(
-                productDTO.productName(),
-                productDTO.categories(),
-                productDTO.description()
-        );
-
-
-
-        ProductsEntity product = ProductsEntity.builder()
-                .productName(productDTO.productName())
-                .description(productDTO.description())
-                .price(productDTO.productPrice())
-                .discount(productDTO.discount())
-                .categories(categories)
-                .searchTagLine(tagline)
-                .launchDate(productDTO.launchDate())
-                .build();
-
-        return productsRepository.save(product).getProductId();
+        return null;
     }
 
     @Override

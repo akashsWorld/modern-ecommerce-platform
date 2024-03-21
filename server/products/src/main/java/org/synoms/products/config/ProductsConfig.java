@@ -7,7 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
-import org.synoms.products.util.ConvertToList;
+import org.synoms.products.util.ConvertToNameList;
 import org.synoms.products.util.SortOnObject;
 import org.synoms.products.util.UtilServices;
 
@@ -43,8 +43,12 @@ public class ProductsConfig {
     }
 
     @Bean
-    protected ConvertToList convertToList(){
-        return new ConvertToList();
+    protected ConvertToNameList convertToList(){
+        return new ConvertToNameList();
+    }
+    @Bean
+    protected ConvertToNameList convertToNameList(){
+        return new ConvertToNameList();
     }
 
 }

@@ -40,20 +40,11 @@ public class ProductsController {
         return ResponseEntity.status(HttpStatus.OK).body(productsService.getProductById(productId));
     }
 
-    @PostMapping(produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<String> saveProduct(@RequestBody ProductDTO productDTO){
-       return ResponseEntity.status(HttpStatus.CREATED).body(productsService.saveProduct(productDTO));
-    }
-
-
-    @PostMapping(value = "/saveMultiple")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void saveProduct(
+    @PostMapping(consumes = {"application/json"} , produces = {"application/json"})
+    public ResponseEntity<List<String>> saveProduct(
             @RequestBody List<ProductDTO> productDTOS
             ){
-
-//        TODO: Have to implement the logic of saving multiple products.
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(productsService.saveProducts(productDTOS));
     }
 
     @GetMapping(value = "/categories")

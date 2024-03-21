@@ -13,10 +13,7 @@ const initialProduct = {
   quantity: 0,
   heighlights: [],
   categories: [],
-  specification: {
-    specificationName: "",
-    specificationKeyValues: [],
-  },
+  specification: [],
   launchDate: "",
   accessories: [],
 };
@@ -61,17 +58,20 @@ const NewProduct = () => {
               className=" absolute right-3 top-1"
               onClick={() => deleteProductHandle(index)}
             >
-              <Button disabled= {products.length===1?true:false}>
+              <Button disabled={products.length === 1 ? true : false}>
                 <Delete />
               </Button>
             </div>
           </div>
           <div>
             <ProductsFrom
-            categoryList={data.categoriesList}
-              productProp={{productNumber:index,
-              product:product,
-              setProducts:setProducts}}
+              specificationList={data.specificationList}
+              categoryList={data.categoriesList}
+              productProp={{
+                productNumber: index,
+                product: product,
+                setProducts: setProducts,
+              }}
             />
           </div>
         </div>
@@ -145,12 +145,12 @@ export interface NewProductObject {
   quantity: number;
   heighlights: string[];
   categories: string[];
-  specification: Specification;
+  specification: SpecificationType[];
   launchDate: string;
   accessories: NewProductObject[];
 }
 
-export interface Specification {
+export interface SpecificationType {
   specificationName: string;
   specificationKeyValues: SpecificationKeyValue[];
 }

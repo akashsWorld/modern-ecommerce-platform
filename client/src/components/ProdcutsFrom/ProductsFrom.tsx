@@ -7,93 +7,85 @@ import { ProductFormProps } from "../../types/product-form-props";
 
 const ProductsFrom = ({
   categoryList,
-  productProp
-  
-}: ProductPropsWithCategoryList) => {
+  specificationList,
+  productProp,
+}: ProductPropsWithNewObjectResponse) => {
+  const { productNumber, product, setProducts } = productProp;
 
-  const {productNumber,
-  product,
-  setProducts}= productProp
-
-  const onChangeProductName = (eve:ChangeEvent<HTMLInputElement>)=>{
-    if(eve!==null){
-      setProducts(pre=>{
-        return pre.map((pro,index)=>{
-          if(index===productNumber){
-            return {...pro,productName:eve.target.value}
+  const onChangeProductName = (eve: ChangeEvent<HTMLInputElement>) => {
+    if (eve !== null) {
+      setProducts((pre) => {
+        return pre.map((pro, index) => {
+          if (index === productNumber) {
+            return { ...pro, productName: eve.target.value };
           }
           return pro;
-        })
-      }) 
+        });
+      });
     }
-
-  }
-  const onChnageDescription =(eve:ChangeEvent<HTMLInputElement>)=>{
-    if(eve!==null){
-      setProducts(pre=>{
-        return pre.map((pro,index)=>{
-          if(index===productNumber){
-            return {...pro,description:eve.target.value}
+  };
+  const onChnageDescription = (eve: ChangeEvent<HTMLInputElement>) => {
+    if (eve !== null) {
+      setProducts((pre) => {
+        return pre.map((pro, index) => {
+          if (index === productNumber) {
+            return { ...pro, description: eve.target.value };
           }
           return pro;
-        })
-      }) 
+        });
+      });
     }
-
-  }
-  const onChangePrice=(eve:ChangeEvent<HTMLInputElement>)=>{
-    if(eve!==null){
-      setProducts(pre=>{
-        return pre.map((pro,index)=>{
-          if(index===productNumber){
-            return {...pro,productPrice:+eve.target.value}
+  };
+  const onChangePrice = (eve: ChangeEvent<HTMLInputElement>) => {
+    if (eve !== null) {
+      setProducts((pre) => {
+        return pre.map((pro, index) => {
+          if (index === productNumber) {
+            return { ...pro, productPrice: +eve.target.value };
           }
           return pro;
-        })
-      }) 
+        });
+      });
     }
-
-  }
-  const onChnageDiscount=(eve:ChangeEvent<HTMLInputElement>)=>{
-    if(eve!==null){
-      setProducts(pre=>{
-        return pre.map((pro,index)=>{
-          if(index===productNumber){
-            return {...pro,discount:+eve.target.value}
+  };
+  const onChnageDiscount = (eve: ChangeEvent<HTMLInputElement>) => {
+    if (eve !== null) {
+      setProducts((pre) => {
+        return pre.map((pro, index) => {
+          if (index === productNumber) {
+            return { ...pro, discount: +eve.target.value };
           }
           return pro;
-        })
-      }) 
+        });
+      });
     }
-
-  }
-  const onChangeQuantity=(eve:ChangeEvent<HTMLInputElement>)=>{
-    if(eve!==null){
-      setProducts(pre=>{
-        return pre.map((pro,index)=>{
-          if(index===productNumber){
-            return {...pro,quantity:+eve.target.value}
+  };
+  const onChangeQuantity = (eve: ChangeEvent<HTMLInputElement>) => {
+    if (eve !== null) {
+      setProducts((pre) => {
+        return pre.map((pro, index) => {
+          if (index === productNumber) {
+            return { ...pro, quantity: +eve.target.value };
           }
           return pro;
-        })
-      }) 
+        });
+      });
     }
-  }
+  };
 
-  const onChangeLaunchDate=(dateTime:Dayjs|null)=>{
-    if(dateTime!==null){
+  const onChangeLaunchDate = (dateTime: Dayjs | null) => {
+    if (dateTime !== null) {
       const dateValue = dateTime.format();
-      setProducts(pre=>{
-        return pre.map((pro,index)=>{
-          if(index===productNumber){
-            return {...pro,launchDate:dateValue}
+      setProducts((pre) => {
+        return pre.map((pro, index) => {
+          if (index === productNumber) {
+            return { ...pro, launchDate: dateValue };
           }
           return pro;
-        })
-      }) 
+        });
+      });
     }
-    
-  }
+  };
 
   return (
     <div className="product-from m2">
@@ -103,8 +95,16 @@ const ProductsFrom = ({
           "& .MuiTextField-root": { m: 1, width: "30ch" },
         }}
       >
-        <TextField label={"Product Name"} onChange={onChangeProductName} value={product.productName} />
-        <TextField label={"Description"} onChange={onChnageDescription} value={product.description} />
+        <TextField
+          label={"Product Name"}
+          onChange={onChangeProductName}
+          value={product.productName}
+        />
+        <TextField
+          label={"Description"}
+          onChange={onChnageDescription}
+          value={product.description}
+        />
         <TextField
           label={"Product Price"}
           value={product.productPrice === 0 ? undefined : product.productPrice}
@@ -129,8 +129,15 @@ const ProductsFrom = ({
           setProducts={setProducts}
         />
         <Categories categoryList={categoryList} productProp={productProp} />
-        <Specification />
-        <DateTimePicker onChange={onChangeLaunchDate} label="Date" defaultValue={dayjs(Date.now())} />
+        <Specification
+          specificationList={specificationList}
+          productForm={productProp}
+        />
+        <DateTimePicker
+          onChange={onChangeLaunchDate}
+          label="Date"
+          defaultValue={dayjs(Date.now())}
+        />
         <AddProductImages
           productNumber={productNumber}
           product={product}
@@ -143,7 +150,8 @@ const ProductsFrom = ({
 
 export default ProductsFrom;
 
-export interface ProductPropsWithCategoryList{
-  categoryList:string[];
-  productProp:ProductFormProps;
+export interface ProductPropsWithNewObjectResponse {
+  categoryList: string[];
+  specificationList: string[];
+  productProp: ProductFormProps;
 }

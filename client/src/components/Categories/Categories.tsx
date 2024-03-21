@@ -2,9 +2,8 @@ import { Autocomplete, Chip, TextField, Typography } from "@mui/material";
 import React from "react";
 import { ProductFormProps } from "../../types/product-form-props";
 import { json } from "react-router-dom";
-import { ProductPropsWithCategoryList } from "../ProdcutsFrom/ProductsFrom";
 
-const Categories = ({ categoryList , productProp }:ProductPropsWithCategoryList ) => {
+const Categories = ({ categoryList , productProp }:CategoryProps ) => {
   
   const {product,productNumber,setProducts}=productProp
 
@@ -49,3 +48,8 @@ const Categories = ({ categoryList , productProp }:ProductPropsWithCategoryList 
 
 export default Categories;
 
+export interface CategoryProps{
+  categoryList:string[];
+  productProp:ProductFormProps;
+
+}

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProductsService {
     CategorySpecificationListDTO getAllCategoriesAndSpecificationNames();
-    String saveProduct(ProductDTO productDTO);
+    List<String> saveProducts(List<ProductDTO> productDTO);
     Page<ProductDTO> getProducts(List<String> category, String searchTagLine, Integer pageNumber, Integer pageSize,String fieldName);
     ProductDTO getProductById(String productId);
 }
