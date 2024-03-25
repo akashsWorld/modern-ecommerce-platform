@@ -13,63 +13,49 @@ const ProductsFrom = ({
   const { productNumber, product, setProducts } = productProp;
 
   const onChangeProductName = (eve: ChangeEvent<HTMLInputElement>) => {
+    console.log(productNumber)
     if (eve !== null) {
-      setProducts((pre) => {
-        return pre.map((pro, index) => {
-          if (index === productNumber) {
-            return { ...pro, productName: eve.target.value };
-          }
-          return pro;
-        });
-      });
+      setProducts(pre =>{
+        const newProducts = [...pre];
+        newProducts[productNumber]={...pre[productNumber],productName:eve.target.value};
+        return newProducts;
+      })
     }
   };
   const onChnageDescription = (eve: ChangeEvent<HTMLInputElement>) => {
     if (eve !== null) {
-      setProducts((pre) => {
-        return pre.map((pro, index) => {
-          if (index === productNumber) {
-            return { ...pro, description: eve.target.value };
-          }
-          return pro;
-        });
-      });
+      setProducts(pre =>{
+        const newProducts = [...pre];
+        newProducts[productNumber]={...pre[productNumber],description:eve.target.value};
+        return newProducts;
+      })
     }
   };
   const onChangePrice = (eve: ChangeEvent<HTMLInputElement>) => {
     if (eve !== null) {
-      setProducts((pre) => {
-        return pre.map((pro, index) => {
-          if (index === productNumber) {
-            return { ...pro, productPrice: +eve.target.value };
-          }
-          return pro;
-        });
-      });
+      setProducts(pre =>{
+        const newProducts = [...pre];
+        newProducts[productNumber]={...pre[productNumber],productPrice:+eve.target.value};
+        return newProducts;
+      })
     }
   };
   const onChnageDiscount = (eve: ChangeEvent<HTMLInputElement>) => {
     if (eve !== null) {
-      setProducts((pre) => {
-        return pre.map((pro, index) => {
-          if (index === productNumber) {
-            return { ...pro, discount: +eve.target.value };
-          }
-          return pro;
-        });
-      });
+      setProducts(pre =>{
+        const newProducts = [...pre];
+        newProducts[productNumber]={...pre[productNumber],discount:+eve.target.value};
+        return newProducts;
+      })
     }
   };
   const onChangeQuantity = (eve: ChangeEvent<HTMLInputElement>) => {
     if (eve !== null) {
-      setProducts((pre) => {
-        return pre.map((pro, index) => {
-          if (index === productNumber) {
-            return { ...pro, quantity: +eve.target.value };
-          }
-          return pro;
-        });
-      });
+      setProducts(pre =>{
+        const newProducts = [...pre];
+        newProducts[productNumber]={...pre[productNumber],quantity:+eve.target.value};
+        return newProducts;
+      })
     }
   };
 
@@ -77,12 +63,9 @@ const ProductsFrom = ({
     if (dateTime !== null) {
       const dateValue = dateTime.format();
       setProducts((pre) => {
-        return pre.map((pro, index) => {
-          if (index === productNumber) {
-            return { ...pro, launchDate: dateValue };
-          }
-          return pro;
-        });
+        const newProducts = [...pre];
+        newProducts[productNumber]={...pre[productNumber],launchDate:dateValue};
+        return newProducts;
       });
     }
   };
@@ -109,6 +92,7 @@ const ProductsFrom = ({
           label={"Product Price"}
           value={product.productPrice === 0 ? undefined : product.productPrice}
           type="number"
+          onChange={onChangePrice}
         />
         <TextField
           label={"Discount"}

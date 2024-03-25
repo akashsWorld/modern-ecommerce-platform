@@ -8,195 +8,146 @@ import {
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { ProductFormProps } from "../../types/product-form-props";
 import { Add, Delete } from "@mui/icons-material";
-import { SpecificationType } from "../NewProduct/NewProduct";
+import NewProduct, { SpecificationType } from "../NewProduct/NewProduct";
 
 const Specification = ({
   specificationList,
   productForm,
 }: SpecificationProps) => {
   const { product, setProducts, productNumber } = productForm;
-  
+
   const [fieldValue, setFieldValue] = useState("");
-  const [selectedSpecfication, setSelectedSpecfication] =
-    useState<SpecificationType>(defaultValue);
+  const [selectedSpecfication, setSelectedSpecfication] = useState<
+    number | undefined
+  >(undefined);
 
   const addSpecificationField = () => {
     if (
-      fieldValue.length === 0 &&
-      isSpecificationPresent(fieldValue, product.specification)
+      fieldValue.length === 0 ||
+      isSpecificationPresent(fieldValue, product.specification).isPresent
     ) {
       return;
     }
     setProducts((pre) => {
-      return pre.map((pro, index) => {
-        if (index === productNumber) {
-          return {
-            ...pro,
-            specification: [
-              ...pro.specification,
-              {
-                specificationName: fieldValue,
-                specificationKeyValues: [
-                  {
-                    specificationKey: "",
-                    specificationValue: "",
-                  },
-                ],
-              },
+      const newPoduct = [...pre];
+      newPoduct[productNumber] = {
+        ...pre[productNumber],
+        specification: [
+          ...pre[productNumber].specification,
+          {
+            specificationName: fieldValue,
+            specificationKeyValues: [
+              { specificationKey: "", specificationValue: "" },
             ],
-          };
-        }
-        return { ...pro };
-      });
+          },
+        ],
+      };
+      return newPoduct;
     });
     setFieldValue("");
   };
 
-  const specificationOnDelete = (specificationTitle: string) => {
-    // FIXME:
+  const specificationOnDelete = () => {
+    if (selectedSpecfication === undefined) return;
     setProducts((pre) => {
-      return pre.map((pro, index) => {
-        if (index === productNumber) {
-          return {
-            ...pro,
-            specification: pro.specification.filter(
-              (spec) =>
-                spec.specificationName.toLowerCase() !==
-                specificationTitle.toLowerCase()
-            ),
-          };
-        }
-        return { ...pro };
-      });
+      const newPoduct = [...pre];
+      return newPoduct.filter((pre, index) => index !== selectedSpecfication);
+    });
+    setSelectedSpecfication(undefined);
+  };
+
+  const addNewSpecificationKeyValueField = () => {
+    if (selectedSpecfication === undefined) {
+      return;
+    }
+    setProducts((pre) => {
+      const newPoduct = [...pre];
+      newPoduct[productNumber] = {
+        ...pre[productNumber],
+        specification: pre[productNumber].specification.map((spec, index) => {
+          if (index === selectedSpecfication) {
+            return {
+              specificationName: spec.specificationName,
+              specificationKeyValues: [
+                ...spec.specificationKeyValues,
+                { specificationKey: "", specificationValue: "" },
+              ],
+            };
+          }
+          return spec;
+        }),
+      };
+      return newPoduct;
     });
   };
 
-  const addNewSpecificationKeyValueField = (specFieldName: string) => {
-    // FIXME:
+  const specificationKeyValuePairOnDelete = (keyValueFieldNumber: number) => {
+    if (selectedSpecfication === undefined) {
+      return;
+    }
     setProducts((pre) => {
-      return pre.map((pro, index) => {
-        if (index === productNumber) {
-          return {
-            ...pro,
-            specification: pro.specification.map((spec) => {
-              if (spec.specificationName === specFieldName) {
-                return {
-                  ...spec,
-                  specificationKeyValues: [
-                    ...spec.specificationKeyValues,
-                    {
-                      specificationKey: "",
-                      specificationValue: "",
-                    },
-                  ],
-                };
-              }
-              return { ...spec };
-            }),
-          };
-        }
-        return { ...pro };
-      });
-    });
-  };
-
-  const specificationKeyValuePairOnDelete = (
-    specFieldName: string,
-    keyValueFieldNumber: number
-  ) => {
-    // FIXME:
-    setProducts((pre) => {
-      return pre.map((pro, index) => {
-        if (index === productNumber) {
-          return {
-            ...pro,
-            specification: pro.specification.map((spec) => {
-              if (spec.specificationName === specFieldName) {
-                return {
-                  ...spec,
-                  specificationKeyValues: spec.specificationKeyValues.filter(
-                    (specKeyValueObj, index) => index !== keyValueFieldNumber
-                  ),
-                };
-              }
-              return { ...spec };
-            }),
-          };
-        }
-        return { ...pro };
-      });
+      const newPoduct = [...pre];
+      newPoduct[productNumber] = {
+        ...pre[productNumber],
+        specification: pre[productNumber].specification.map((spec, index) => {
+          if (index === selectedSpecfication) {
+            return {
+              specificationName: spec.specificationName,
+              specificationKeyValues: spec.specificationKeyValues.filter(
+                (keyValue, index) => index !== keyValueFieldNumber
+              ),
+            };
+          }
+          return spec;
+        }),
+      };
+      return newPoduct;
     });
   };
 
   const onChangeSpecificationKey = (
-    specFieldName: string,
     keyValueFieldNumber: number,
     newValue: string
   ) => {
-    FIXME: setProducts((pre) => {
-      return pre.map((pro, index) => {
-        if (index === productNumber) {
-          return {
-            ...pro,
-            specification: pro.specification.map((spec) => {
-              if (spec.specificationName === specFieldName) {
-                return {
-                  ...spec,
-                  specificationKeyValues: spec.specificationKeyValues.map(
-                    (specKeyValueObj, keyValueIndex) => {
-                      if (keyValueIndex === keyValueFieldNumber) {
-                        return {
-                          ...specKeyValueObj,
-                          specificationKey: newValue,
-                        };
-                      }
-                      return { ...specKeyValueObj };
-                    }
-                  ),
-                };
-              }
-              return { ...spec };
-            }),
-          };
-        }
-        return { ...pro };
-      });
+    if (selectedSpecfication === undefined) {
+      return;
+    }
+    setProducts((pre) => {
+      const newPoduct = [...pre];
+      const keyValueField =
+        newPoduct[productNumber].specification[selectedSpecfication]
+          .specificationKeyValues[keyValueFieldNumber];
+
+      newPoduct[productNumber].specification[
+        selectedSpecfication
+      ].specificationKeyValues[keyValueFieldNumber] = {
+        ...keyValueField,
+        specificationKey: newValue,
+      };
+      return newPoduct;
     });
   };
 
   const onChnageSpecificationValue = (
-    specFieldName: string,
     keyValueFieldNumber: number,
     newValue: string
   ) => {
-    FIXME: setProducts((pre) => {
-      return pre.map((pro, index) => {
-        if (index === productNumber) {
-          return {
-            ...pro,
-            specification: pro.specification.map((spec) => {
-              if (spec.specificationName === specFieldName) {
-                return {
-                  ...spec,
-                  specificationKeyValues: spec.specificationKeyValues.map(
-                    (specKeyValueObj, keyValueIndex) => {
-                      if (keyValueIndex === keyValueFieldNumber) {
-                        return {
-                          ...specKeyValueObj,
-                          specificationValue: newValue,
-                        };
-                      }
-                      return { ...specKeyValueObj };
-                    }
-                  ),
-                };
-              }
-              return { ...spec };
-            }),
-          };
-        }
-        return { ...pro };
-      });
+    if (selectedSpecfication === undefined) {
+      return;
+    }
+    setProducts((pre) => {
+      const newPoduct = [...pre];
+      const keyValueField =
+        newPoduct[productNumber].specification[selectedSpecfication]
+          .specificationKeyValues[keyValueFieldNumber];
+
+      newPoduct[productNumber].specification[
+        selectedSpecfication
+      ].specificationKeyValues[keyValueFieldNumber] = {
+        ...keyValueField,
+        specificationValue: newValue,
+      };
+      return newPoduct;
     });
   };
 
@@ -204,11 +155,21 @@ const Specification = ({
     eve: SyntheticEvent<Element, Event>,
     newInput: string | null
   ) => {
-    if (newInput !== null && newInput.length !== 0) {
-      const spec = getSpecificationByName(newInput, product.specification);
-      setSelectedSpecfication(spec);
-    }
+    const isPresent = isSpecificationPresent(newInput, product.specification);
+    console.log(isPresent);
+    if (isPresent.isPresent) setSelectedSpecfication(isPresent.index);
   };
+
+  const [currentSpec, setCurrentSpec] = useState<SpecificationType|undefined>(undefined);
+
+  useEffect(() => {
+    setCurrentSpec(
+      selectedSpecfication !== undefined
+        ? product.specification[selectedSpecfication]
+        : selectedSpecfication
+    );
+    console.log(currentSpec)
+  }, [selectedSpecfication]);
 
   return (
     <Box component={"section"}>
@@ -239,35 +200,35 @@ const Specification = ({
                 (spec) => spec.specificationName
               )}
               sx={{ width: 300 }}
-              value={selectedSpecfication.specificationName}
-              onChange={updateSelectedSpecification}
+              value={
+                selectedSpecfication !== undefined
+                  ? product.specification[selectedSpecfication]
+                      .specificationName
+                  : selectedSpecfication
+              }
+              onChange={(eve, newInput) =>
+                updateSelectedSpecification(eve, newInput)
+              }
               renderInput={(params) => (
                 <TextField {...params} label="Selected Specification" />
               )}
             />
           </div>
 
-          {selectedSpecfication !== undefined ? (
+          {currentSpec !== undefined ? (
             <div className="specification-list">
               <div className="each-spec-field">
                 <div className="flex">
                   <Typography variant="h6">
-                    {selectedSpecfication.specificationName}
+                    {currentSpec.specificationName}
                   </Typography>
                   <div className="ml-2">
-                    <Button
-                      variant="outlined"
-                      onClick={() =>
-                        specificationOnDelete(
-                          selectedSpecfication.specificationName
-                        )
-                      }
-                    >
+                    <Button variant="outlined" onClick={specificationOnDelete}>
                       <Delete />
                     </Button>
                   </div>{" "}
                 </div>
-                {selectedSpecfication.specificationKeyValues.map(
+                {currentSpec.specificationKeyValues.map(
                   (keyValue, keyValueNumber) => (
                     <div className="each-key-value-field" key={keyValueNumber}>
                       <TextField
@@ -275,7 +236,6 @@ const Specification = ({
                         value={keyValue.specificationKey}
                         onChange={(eve) =>
                           onChangeSpecificationKey(
-                            selectedSpecfication.specificationName,
                             keyValueNumber,
                             eve.target.value
                           )
@@ -286,7 +246,6 @@ const Specification = ({
                         value={keyValue.specificationValue}
                         onChange={(eve) =>
                           onChnageSpecificationValue(
-                            selectedSpecfication.specificationName,
                             keyValueNumber,
                             eve.target.value
                           )
@@ -297,10 +256,7 @@ const Specification = ({
                           size="small"
                           variant="outlined"
                           onClick={() =>
-                            specificationKeyValuePairOnDelete(
-                              selectedSpecfication.specificationName,
-                              keyValueNumber
-                            )
+                            specificationKeyValuePairOnDelete(keyValueNumber)
                           }
                         >
                           <Delete fontSize="small" />
@@ -311,11 +267,7 @@ const Specification = ({
                 )}
                 <Button
                   variant="outlined"
-                  onClick={() =>
-                    addNewSpecificationKeyValueField(
-                      selectedSpecfication.specificationName
-                    )
-                  }
+                  onClick={addNewSpecificationKeyValueField}
                   endIcon={<Add />}
                 >
                   Add New
@@ -343,36 +295,17 @@ export interface SpecificationProps {
 }
 
 function isSpecificationPresent(
-  specName: string,
+  specName: string | null,
   specifications: SpecificationType[]
 ) {
+  console.log(specifications);
   if (specName !== null && specName.length === 0) {
     let len = specifications.length;
     while (len--) {
       if (specifications[len].specificationName == specName) {
-        return true;
+        return { isPresent: true, index: len };
       }
     }
   }
-  return false;
+  return { isPresent: false, index: -1 };
 }
-
-function getSpecificationByName(
-  specName: string,
-  specifications: SpecificationType[]
-) {
-  if (specName !== null && specName.length !== 0) {
-    let len = specifications.length;
-    while (len--) {
-      if (specifications[len].specificationName == specName) {
-        return { ...specifications[len] };
-      }
-    }
-  }
-  return defaultValue;
-}
-
-const defaultValue: SpecificationType = {
-  specificationName: "All",
-  specificationKeyValues: [{ specificationKey: "", specificationValue: "" }],
-};
