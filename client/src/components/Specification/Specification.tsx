@@ -85,24 +85,47 @@ const Specification = ({
     if (selectedSpecfication === undefined) {
       return;
     }
+
     setProducts((pre) => {
       const newPoduct = [...pre];
+      const previousSpec = pre[productNumber].specification;
       newPoduct[productNumber] = {
         ...pre[productNumber],
-        specification: pre[productNumber].specification.map((spec, index) => {
+        specification: previousSpec.map((spec, index) => {
           if (index === selectedSpecfication) {
             return {
-              specificationName: spec.specificationName,
+              ...spec,
               specificationKeyValues: spec.specificationKeyValues.filter(
-                (keyValue, index) => index !== keyValueFieldNumber
+                (keyVal, keyValIndex) => keyValIndex !== keyValueFieldNumber
               ),
             };
           }
           return spec;
         }),
       };
+
+      console.log(newPoduct);
       return newPoduct;
     });
+
+    // setProducts((pre) => {
+    //   const newPoduct = [...pre];
+    //   newPoduct[productNumber] = {
+    //     ...pre[productNumber],
+    //     specification: pre[productNumber].specification.map((spec, index) => {
+    //       if (index === selectedSpecfication) {
+    //         return {
+    //           specificationName: spec.specificationName,
+    //           specificationKeyValues: spec.specificationKeyValues.filter(
+    //             (keyValue, index) => index !== keyValueFieldNumber
+    //           ),
+    //         };
+    //       }
+    //       return spec;
+    //     }),
+    //   };
+    //   return newPoduct;
+    // });
   };
 
   const onChangeSpecificationKey = (
@@ -160,7 +183,9 @@ const Specification = ({
     if (isPresent.isPresent) setSelectedSpecfication(isPresent.index);
   };
 
-  const [currentSpec, setCurrentSpec] = useState<SpecificationType|undefined>(undefined);
+  const [currentSpec, setCurrentSpec] = useState<SpecificationType | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     setCurrentSpec(
@@ -168,7 +193,6 @@ const Specification = ({
         ? product.specification[selectedSpecfication]
         : selectedSpecfication
     );
-    console.log(currentSpec)
   }, [selectedSpecfication]);
 
   return (
@@ -298,11 +322,10 @@ function isSpecificationPresent(
   specName: string | null,
   specifications: SpecificationType[]
 ) {
-  console.log(specifications);
-  if (specName !== null && specName.length === 0) {
+  if (specName !== null && specName.length !== 0) {
     let len = specifications.length;
     while (len--) {
-      if (specifications[len].specificationName == specName) {
+      if (specifications[len].specificationName === specName) {
         return { isPresent: true, index: len };
       }
     }
