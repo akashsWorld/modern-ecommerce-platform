@@ -1,15 +1,20 @@
 server:
-  port: 8083
+  port: 8084
 spring:
   application:
-    name: orders
+    name: media-service
 
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+      file-size-threshold: 2KB
   data:
     mongodb:
       authentication-database: admin
       username: synoms
       password: synoms
-      database: orders
+      database: products
       host: mongodb
       port: 27017
       uri: mongodb://synoms:synoms@localhost:27017/

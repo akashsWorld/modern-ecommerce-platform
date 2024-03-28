@@ -1,6 +1,8 @@
 spring:
   application:
     name: user
+server:
+  port: 8082
   datasource:
     username: synoms
     password: synoms
@@ -13,4 +15,4 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create-drop
-    
+

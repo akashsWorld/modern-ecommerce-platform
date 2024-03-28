@@ -9,27 +9,12 @@ services:
       POSTGRES_PASSWORD: synoms
       PGDATA: /data/postgres
     volumes:
-      - postgres:/data/postgres
+      - postgres:/var/lib/postgres
     ports:
       - "5432:5432"
     networks:
       - postgres
     restart: unless-stopped
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "5050:80"
-    networks:
-      - postgres
-    restart: unless-stopped
-
   mongo:
     image: mongo
     restart: unless-stopped
@@ -40,29 +25,19 @@ services:
       - "27017:27017"
     networks:
       - mongo
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "8521:8081"
-    networks:
-      - mongo
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: synoms
-      ME_CONFIG_MONGODB_ADMINPASSWORD: synoms
-      ME_CONFIG_MONGODB_URL: mongodb://synoms:synoms@mongo:27017/
   
   zipkin:
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
-    
-networks:
-  postgres:
-    driver: bridge
-  mongo:
-    driver: bridge
+
+# Networks
+# networks:
+# TODO:
+
+
+
+
+# Volumes
 volumes:
   postgres:
-  pgadmin:

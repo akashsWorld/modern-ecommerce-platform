@@ -7,19 +7,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
-import org.synoms.products.util.ConvertToNameList;
-import org.synoms.products.util.SortOnObject;
-import org.synoms.products.util.UtilServices;
+import org.synoms.products.rest_services.MediaServiceClient;
+import org.synoms.products.rest_services.OrderServiceClient;
+import org.synoms.products.util_services.SortOnObject;
+import org.synoms.products.util_services.UtilServices;
 
 @Configuration
-@ComponentScan(basePackages = {"com.synoms.orders.entity"})
 public class ProductsConfig {
-
-
-    @Bean
-    protected UtilServices utilServices(){
-        return new UtilServices();
-    }
 
     @Bean
     protected SortOnObject sortOnObject(){return new SortOnObject();}
@@ -43,12 +37,8 @@ public class ProductsConfig {
     }
 
     @Bean
-    protected ConvertToNameList convertToList(){
-        return new ConvertToNameList();
-    }
-    @Bean
-    protected ConvertToNameList convertToNameList(){
-        return new ConvertToNameList();
+    protected MediaServiceClient mediaServiceClient(RestTemplate restTemplate,HttpHeaders httpHeaders,Environment environment){
+        return new MediaServiceClient(restTemplate,httpHeaders,environment);
     }
 
 }

@@ -1,17 +1,15 @@
 package org.synoms.products.controller;
 
-import feign.form.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.synoms.client.products.CategorySpecificationListDTO;
-import org.synoms.client.products.ProductDTO;
+import org.synoms.client.products.DTOS.CategoryResponse;
+import org.synoms.client.products.DTOS.ProductDTO;
 import org.synoms.products.service.ProductsService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/products")
@@ -48,8 +46,8 @@ public class ProductsController {
     }
 
     @GetMapping(value = "/categories")
-    public ResponseEntity<CategorySpecificationListDTO> getAllProductCategoriesAndSpecificationNames() {
-        return ResponseEntity.ok().body(productsService.getAllCategoriesAndSpecificationNames());
+    public ResponseEntity<CategoryResponse> getAllProductCategoriesAndSpecificationNames() {
+        return ResponseEntity.ok().body(productsService.getAllCategories());
     }
 
 //    @GetMapping(value = "/demo")
